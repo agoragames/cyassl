@@ -5768,3 +5768,31 @@ int UnLockMutex(CyaSSL_Mutex* m)
 
     #endif /* USE_WINDOWS_API */
 #endif /* SINGLE_THREADED */
+
+
+#ifdef CYASSL_NO_FILESYSTEM_VERIFY_CERTFIICATE
+#include "types.h"
+#include "logging.h"
+
+// Set these to default values initially.
+CYA_Certificate_Verify_Callback m_certVerifyCallback = 0;
+
+void cya_set_cert_verify_callback(CYA_Certificate_Verify_Callback callback)
+{
+	if(m_certVerifyCallback != 0)
+	{
+		CYASSL_MSG("Cert verify callback already registered. Overwriting previous callback");
+	}
+	m_certVerifyCallback = callback;
+}
+
+int CyaSSL_no_filesystem_verify(SSL_CTX* ctx)
+{
+	if(m_certVerifyCallback != 0)
+	{
+		return m_certVerifyCallback(ctx);
+	}
+	
+	return SSL_FAILURE;
+}
+#endif /* CYASSL_NO_FILESYSTEM_VERIFY_CERTFIICATE */
