@@ -1274,3 +1274,26 @@ CYASSL_LOCAL int UnLockMutex(CyaSSL_Mutex*);
 
 #endif /* CyaSSL_INT_H */
 
+#ifndef CYASSL_NO_FILESYSTEM_VERIFY_CERTFIICATE
+#define CYASSL_NO_FILESYSTEM_VERIFY_CERTFIICATE
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+	
+	
+	typedef int(*CYA_Certificate_Verify_Callback)(SSL_CTX* ctx);
+	
+	// A configurable callback to verify a host based on it's certificate
+	void cya_set_cert_verify_callback(CYA_Certificate_Verify_Callback callback);
+	
+	extern CYA_Certificate_Verify_Callback m_certVerifyCallback;
+	
+	int CyaSSL_no_filesystem_verify(SSL_CTX* ctx);
+	
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* CYASSL_NO_FILESYSTEM_VERIFY_CERTFIICATE */
